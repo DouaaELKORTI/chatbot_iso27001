@@ -86,7 +86,6 @@ class ISO27001Chatbot:
                 "content": faq["reponse"] if isinstance(faq["reponse"], str) else "\n".join(faq["reponse"])
             })
 
-        # Compute vectors
         self.corpus = documents
         self.tfidf_vectors = self.tfidf_vectorizer.fit_transform(documents)
         self.spaCy_vectors = np.array([self.nlp(doc).vector for doc in documents])
@@ -100,6 +99,55 @@ class ISO27001Chatbot:
             return True
         meaningful_chars = sum(1 for char in text if char in vowels or char.isspace())
         return total_chars > 5 and (meaningful_chars / total_chars < 0.2)
+
+    def split_questions(self, user_query):
+        """Split user input into separate questions with improved detection."""
+        # Common separators and interrogation words
+        separators = [" et aussi ", " et ", ",", ";", "?", "!"]
+        question_starters = ["qu'est-ce que", "comment", "pourquoi", "quels", "quelle", "est-ce que", "combien"]
+        temp_query = user_query.strip()
+        
+        # Replace separators with a unique delimiter
+        for sep in separators:
+            temp_query = temp_query.replace(sep, f"|||SEP_{sep}|||")
+
+        # Split into parts
+        parts = temp_query.split("|||")
+        questions = []
+        current_question = ""
+
+        for part in parts:
+            if "SEP_" in part:
+                if current_question and not self.is_gibberish(current_question):
+                    questions.append(current_question.strip())
+                current_question = ""
+                sep = part.replace("SEP_", "")
+                if sep in ["?", "!"]:
+                    current_question += sep
+            else:
+                current_question += part
+
+        # Add the last question if valid
+        if current_question and not self.is_gibberish(current_question):
+            questions.append(current_question.strip())
+
+        # Further split based on question starters if no separators were found
+        if len(questions) <= 1 and not any(sep in user_query for sep in separators):
+            temp_questions = []
+            current = ""
+            words = user_query.split()
+            for i, word in enumerate(words):
+                if any(word.lower().startswith(starter.split()[0]) for starter in question_starters) and current:
+                    temp_questions.append(current.strip())
+                    current = word
+                else:
+                    current += " " + word if current else word
+            if current:
+                temp_questions.append(current.strip())
+            questions = temp_questions
+
+        # Filter out invalid or too-short questions
+        return [q for q in questions if q and len(q) > 10 and not self.is_gibberish(q)]
 
     def compute_combined_similarity(self, user_query):
         """Compute combined SpaCy and TF-IDF similarity."""
@@ -116,7 +164,6 @@ class ISO27001Chatbot:
             ) for i in range(len(self.corpus))
         ])
 
-        # Combine scores (70% SpaCy, 30% TF-IDF)
         return 0.7 * spaCy_similarities + 0.3 * tfidf_similarities
 
     def build_response(self, matched_item, user_query):
@@ -155,23 +202,42 @@ class ISO27001Chatbot:
         return "Réponse non formatée, veuillez vérifier la base de connaissances."
 
     def get_response(self, user_query):
-        """Find and return the best response with searching indication."""
-        print(f"Recherche en cours pour : '{user_query}'...")  # Indicate searching
+        """Find and return a single cohesive response for multiple questions."""
+        print(f"Recherche en cours pour : '{user_query}'...")
         if self.is_gibberish(user_query):
             return "Je ne comprends pas votre saisie. Posez-moi une question claire sur ISO 27001 !"
 
-        combined_scores = self.compute_combined_similarity(user_query)
-        best_match_idx = combined_scores.argmax()
-        similarity_score = combined_scores[best_match_idx]
+        # Split into individual questions
+        questions = self.split_questions(user_query)
+        if not questions:
+            return "Aucune question valide détectée. Posez-moi une question sur ISO 27001 !"
 
-        if similarity_score > 0.65:  # Lowered threshold for better matching
-            matched_item = self.responses[best_match_idx]
-            response = self.build_response(matched_item, user_query)
-            print(f"Trouvé une correspondance avec un score de {similarity_score:.2f}")
-            return response
+        responses = []
+        for q in questions:
+            print(f"  Traitement de la question : '{q}'...")
+            combined_scores = self.compute_combined_similarity(q)
+            best_match_idx = combined_scores.argmax()
+            similarity_score = combined_scores[best_match_idx]
+
+            if similarity_score > 0.65:
+                matched_item = self.responses[best_match_idx]
+                response = self.build_response(matched_item, q)
+                print(f"  Trouvé une correspondance avec un score de {similarity_score:.2f}")
+                responses.append(response)
+            else:
+                print(f"  Aucune correspondance pertinente trouvée pour '{q}'.")
+                responses.append(f"Je n’ai pas trouvé de réponse pertinente dans iso27001.json pour '{q}'.")
+
+        # Combine responses into a single cohesive answer
+        if len(responses) == 1:
+            return responses[0]
         else:
-            print("Aucune correspondance pertinente trouvée.")
-            return "Je n’ai pas trouvé de réponse pertinente dans iso27001.json. Essayez de reformuler votre question."
+            combined_response = "Voici les réponses à vos questions : "
+            for i, resp in enumerate(responses):
+                combined_response += resp
+                if i < len(responses) - 1:
+                    combined_response += " Par ailleurs, "
+            return combined_response
 
     def log_query(self, user_query, response, db=None):
         """Log query and response."""
@@ -203,16 +269,16 @@ class ISO27001Chatbot:
 if __name__ == "__main__":
     chatbot = ISO27001Chatbot()
     print("Chatbot ISO 27001\nLogo\nBonjour ! Comment puis-je vous aider avec ISO 27001 ?")
-    queries = [
-        "hhhh",
-        "j",
-        "nnooef",
-        "fzefµ",
-        "efdzfzef",
-        "ezffefezfzf",
-        "Qu'est-ce qu'un SMSI ?"
+    
+    # Test cases
+    test_queries = [
+        "Comment maintenir la certification ISO 27001 ? ISO 27001 aide-t-elle à respecter le RGPD ?",
+        "ISO 27001 aide-t-elle à respecter le RGPD ,,,,Comment maintenir la certification ISO 27001",
+        "ISO 27001 aide-t-elle à respecter le RGPD ,Comment maintenir la certification ISO 27001",
+        "Comment maintenir la certification ISO 27001 ISO 27001 aide-t-elle à respecter le RGPD"
     ]
-    for query in queries:
+    
+    for query in test_queries:
         print(f"\nUtilisateur : {query}")
         response = chatbot.get_response(query)
         print(f"Chatbot : {response}")

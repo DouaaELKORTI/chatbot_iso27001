@@ -5,75 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot ISO 27001</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
             <h1>Chatbot ISO 27001</h1>
-            <div class="header-actions">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
-                <button class="settings-btn" title="Paramètres">⚙️</button>
-            </div>
-        </div>
-        <div class="settings-panel">
-            <h3>Thèmes</h3>
-            <div class="theme-options">
-                <button class="theme-btn" data-theme="light">Clair</button>
-                <button class="theme-btn" data-theme="dark">Sombre</button>
-                <button class="theme-btn" data-theme="iso">ISO 27001</button>
-            </div>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ISO 27001 Logo" class="logo">
+            <button class="theme-toggle" title="Changer de thème">☀️</button>
         </div>
         <div class="chat-box" id="chat-box">
             <div class="message bot-message">
-                <span class="typing-text">Bonjour ! Comment puis-je vous aider avec ISO 27001 ?</span>
+                <span>Bonjour ! Comment puis-je vous aider avec ISO 27001 aujourd’hui ?</span>
             </div>
         </div>
         <div class="input-container">
-            <textarea id="user-input" placeholder="Posez-moi une question..." rows="2" spellcheck="false"></textarea>
-            <button id="send-btn" class="ripple-btn">
-                <span>Envoyer</span>
+            <textarea id="user-input" placeholder="Tapez votre question ici..." rows="1" spellcheck="false"></textarea>
+            <button id="send-btn" class="send-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
             </button>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
-        // Typing animation
         document.addEventListener("DOMContentLoaded", () => {
-            const typingText = document.querySelector(".typing-text");
-            const text = typingText.textContent;
-            typingText.textContent = "";
-            let i = 0;
-            const speed = 40;
-            function type() {
-                if (i < text.length) {
-                    typingText.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
+            // Theme toggle
+            const themeToggle = document.querySelector(".theme-toggle");
+            const themes = ["light", "dark", "iso"];
+            let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "light");
+            document.body.classList.add(themes[currentThemeIndex]);
+            updateThemeIcon();
+
+            function updateThemeIcon() {
+                themeToggle.textContent = currentThemeIndex === 0 ? "🌙" : currentThemeIndex === 1 ? "⭐" : "☀️";
             }
-            type();
 
-            // Settings panel toggle
-            const settingsBtn = document.querySelector(".settings-btn");
-            const settingsPanel = document.querySelector(".settings-panel");
-            settingsBtn.addEventListener("click", () => {
-                settingsPanel.classList.toggle("active");
+            themeToggle.addEventListener("click", () => {
+                document.body.classList.remove(themes[currentThemeIndex]);
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                document.body.classList.add(themes[currentThemeIndex]);
+                localStorage.setItem("theme", themes[currentThemeIndex]);
+                updateThemeIcon();
             });
-
-            // Theme switching
-            const themeButtons = document.querySelectorAll(".theme-btn");
-            themeButtons.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    document.body.dataset.theme = btn.dataset.theme;
-                    localStorage.setItem("theme", btn.dataset.theme); // Persist theme choice
-                    settingsPanel.classList.remove("active"); // Close panel after selection
-                });
-            });
-
-            // Load saved theme
-            const savedTheme = localStorage.getItem("theme") || "iso";
-            document.body.dataset.theme = savedTheme;
         });
     </script>
 </body>
