@@ -102,16 +102,13 @@ class ISO27001Chatbot:
 
     def split_questions(self, user_query):
         """Split user input into separate questions with improved detection."""
-        # Common separators and interrogation words
         separators = [" et aussi ", " et ", ",", ";", "?", "!"]
         question_starters = ["qu'est-ce que", "comment", "pourquoi", "quels", "quelle", "est-ce que", "combien"]
         temp_query = user_query.strip()
         
-        # Replace separators with a unique delimiter
         for sep in separators:
             temp_query = temp_query.replace(sep, f"|||SEP_{sep}|||")
 
-        # Split into parts
         parts = temp_query.split("|||")
         questions = []
         current_question = ""
@@ -127,11 +124,9 @@ class ISO27001Chatbot:
             else:
                 current_question += part
 
-        # Add the last question if valid
         if current_question and not self.is_gibberish(current_question):
             questions.append(current_question.strip())
 
-        # Further split based on question starters if no separators were found
         if len(questions) <= 1 and not any(sep in user_query for sep in separators):
             temp_questions = []
             current = ""
@@ -146,7 +141,6 @@ class ISO27001Chatbot:
                 temp_questions.append(current.strip())
             questions = temp_questions
 
-        # Filter out invalid or too-short questions
         return [q for q in questions if q and len(q) > 10 and not self.is_gibberish(q)]
 
     def compute_combined_similarity(self, user_query):
@@ -207,7 +201,6 @@ class ISO27001Chatbot:
         if self.is_gibberish(user_query):
             return "Je ne comprends pas votre saisie. Posez-moi une question claire sur ISO 27001 !"
 
-        # Split into individual questions
         questions = self.split_questions(user_query)
         if not questions:
             return "Aucune question valide détectée. Posez-moi une question sur ISO 27001 !"
@@ -228,7 +221,6 @@ class ISO27001Chatbot:
                 print(f"  Aucune correspondance pertinente trouvée pour '{q}'.")
                 responses.append(f"Je n’ai pas trouvé de réponse pertinente dans iso27001.json pour '{q}'.")
 
-        # Combine responses into a single cohesive answer
         if len(responses) == 1:
             return responses[0]
         else:
@@ -260,9 +252,11 @@ class ISO27001Chatbot:
         with open(log_path, 'w', encoding='utf-8') as f:
             json.dump(logs, f, ensure_ascii=False, indent=4)
 
-        if db:
+        # Use explicit None check for MongoDB logging
+        if db is not None:
             try:
                 db["conversations"].insert_one(log_entry)
+                print(f"Conversation enregistrée dans MongoDB : {user_query}")
             except Exception as e:
                 print(f"Erreur lors de l'enregistrement dans MongoDB : {e}")
 
