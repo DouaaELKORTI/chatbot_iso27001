@@ -5,3 +5,8 @@ logs/*.json
 database/*.db
 database/__pycache__/
 *.ipynb_checkpoints
+database/
+*.wt
+*.lock
+*.bson
+*.log
