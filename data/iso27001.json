@@ -42,11 +42,11 @@
     "controles_annexe_A": {
       "categories": [
         {
-          "id": "5",
+          "id": "A.5",
           "nom": "Contrôles organisationnels",
           "controles": [
             {
-              "id": "5.1",
+              "id": "A.5.1",
               "titre": "Politiques de sécurité",
               "description": "Élaborer, approuver et communiquer les politiques de sécurité.",
               "exigences": "Les politiques doivent être mises à jour périodiquement et validées par la direction.",
@@ -57,7 +57,6 @@
                 "Communiquer et sensibiliser les employés.",
                 "Réviser et mettre à jour régulièrement."
               ],
-              "exemples": "Exemple : Mise en place d'une politique exigeant l'authentification à deux facteurs.",
               "mots_cles": ["politiques de sécurité", "mise en place", "stratégie de sécurité", "ISO 27001"],
               "conformite_check": [
                 "Avez-vous une politique de sécurité écrite ?",
@@ -73,7 +72,7 @@
               ]
             },
             {
-              "id": "5.7",
+              "id": "A.5.7",
               "titre": "Renseignement sur les menaces",
               "description": "Collecter et analyser les informations sur les menaces cybersécurité.",
               "exigences": "Les menaces doivent être surveillées en continu avec des sources fiables.",
@@ -82,7 +81,6 @@
                 "Analyser les incidents et partager les retours d'expérience.",
                 "Mettre en place une veille active sur les nouvelles vulnérabilités."
               ],
-              "exemples": "Exemple : Utilisation d'un SOC pour surveiller et détecter les menaces.",
               "mots_cles": ["renseignement sur les menaces", "cybersécurité", "ISO 27001", "veille sécurité"],
               "conformite_check": [
                 "Surveillez-vous les menaces en continu ?",
@@ -93,6 +91,159 @@
                 "Abonnez-vous à une plateforme de threat intelligence (ex. Recorded Future).",
                 "Mettez en place un processus de veille sur les vulnérabilités.",
                 "Documentez et partagez les leçons tirées des incidents."
+              ]
+            },
+            {
+              "id": "A.5.23",
+              "titre": "Sécurité dans le cloud",
+              "description": "Gérer la sécurité des services cloud utilisés par l'organisation.",
+              "exigences": "Évaluer les risques liés aux services cloud et appliquer des contrôles adaptés.",
+              "bonnes_pratiques": [
+                "Évaluer les fournisseurs de cloud.",
+                "Mettre en place des accords de sécurité (SLA)."
+              ],
+              "mots_cles": ["cloud", "sécurité", "fournisseurs"],
+              "conformite_check": [
+                "Avez-vous évalué les risques des services cloud que vous utilisez ?",
+                "Disposez-vous d'accords de sécurité avec vos fournisseurs cloud ?"
+              ],
+              "actions_correctives": [
+                "Effectuez une évaluation des risques pour chaque service cloud.",
+                "Négociez des SLA avec vos fournisseurs."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "A.6",
+          "nom": "Contrôles liés aux personnes",
+          "controles": [
+            {
+              "id": "A.6.1",
+              "titre": "Filtrage des employés",
+              "description": "Vérifier les antécédents des employés avant leur embauche.",
+              "exigences": "Appliquer un processus de vérification adapté aux risques.",
+              "bonnes_pratiques": [
+                "Vérifier les références professionnelles.",
+                "Effectuer des contrôles d'identité."
+              ],
+              "mots_cles": ["ressources humaines", "vérification", "embauche"],
+              "conformite_check": [
+                "Vérifiez-vous les antécédents des nouveaux employés ?",
+                "Adaptez-vous le niveau de vérification aux risques des postes ?"
+              ],
+              "actions_correctives": [
+                "Mettez en place un processus de vérification des antécédents.",
+                "Documentez les critères de filtrage par poste."
+              ]
+            },
+            {
+              "id": "A.6.3",
+              "titre": "Sensibilisation à la sécurité",
+              "description": "Former les employés sur les politiques et pratiques de sécurité.",
+              "exigences": "La sensibilisation doit être continue et adaptée aux rôles.",
+              "bonnes_pratiques": [
+                "Organiser des sessions de formation régulières.",
+                "Fournir des supports éducatifs."
+              ],
+              "mots_cles": ["formation", "sensibilisation", "sécurité"],
+              "conformite_check": [
+                "Formez-vous régulièrement vos employés à la sécurité ?",
+                "Adaptez-vous la formation aux rôles spécifiques ?"
+              ],
+              "actions_correctives": [
+                "Planifiez des sessions de sensibilisation annuelles.",
+                "Créez des modules de formation spécifiques aux rôles."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "A.7",
+          "nom": "Contrôles physiques",
+          "controles": [
+            {
+              "id": "A.7.1",
+              "titre": "Zones sécurisées",
+              "description": "Protéger les zones contenant des actifs critiques par des contrôles physiques.",
+              "exigences": "Limiter l'accès aux seules personnes autorisées.",
+              "bonnes_pratiques": [
+                "Installer des serrures ou badges d'accès.",
+                "Surveiller les entrées et sorties."
+              ],
+              "mots_cles": ["sécurité physique", "zones sécurisées", "accès"],
+              "conformite_check": [
+                "Avez-vous des zones sécurisées définies pour vos actifs critiques ?",
+                "L'accès est-il limité aux personnes autorisées ?"
+              ],
+              "actions_correctives": [
+                "Définissez des zones sécurisées si elles n'existent pas.",
+                "Installez des contrôles d'accès physiques (serrures, badges)."
+              ]
+            },
+            {
+              "id": "A.7.4",
+              "titre": "Protection des équipements",
+              "description": "Protéger les équipements contre les dommages physiques et environnementaux.",
+              "exigences": "Prévenir les dommages dus à l'eau, au feu, ou aux températures extrêmes.",
+              "bonnes_pratiques": [
+                "Installer des systèmes de détection d'incendie.",
+                "Maintenir une climatisation adéquate."
+              ],
+              "mots_cles": ["équipements", "protection physique", "environnement"],
+              "conformite_check": [
+                "Vos équipements sont-ils protégés contre les incendies ?",
+                "Disposez-vous de contrôles contre les dommages environnementaux (ex. humidité) ?"
+              ],
+              "actions_correctives": [
+                "Installez des détecteurs de fumée et des extincteurs.",
+                "Ajoutez une climatisation pour protéger les équipements sensibles."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "A.8",
+          "nom": "Contrôles technologiques",
+          "controles": [
+            {
+              "id": "A.8.5",
+              "titre": "Authentification sécurisée",
+              "description": "Mettre en place une authentification sécurisée pour limiter l'accès non autorisé.",
+              "exigences": "Utiliser l'authentification multi-facteurs (MFA) lorsque possible.",
+              "bonnes_pratiques": [
+                "Activer MFA pour les systèmes critiques.",
+                "Utiliser des mots de passe complexes."
+              ],
+              "mots_cles": ["authentification", "MFA", "accès sécurisé"],
+              "conformite_check": [
+                "Utilisez-vous l'authentification multi-facteurs (MFA) ?",
+                "Vos mots de passe respectent-ils les exigences de complexité ?"
+              ],
+              "actions_correctives": [
+                "Activez MFA sur tous les systèmes critiques.",
+                "Mettez en place une politique de mots de passe complexes."
+              ]
+            },
+            {
+              "id": "A.8.24",
+              "titre": "Utilisation de la cryptographie",
+              "description": "Protéger les données sensibles avec des techniques de cryptographie.",
+              "exigences": "Utiliser des algorithmes de chiffrement modernes et gérer les clés de manière sécurisée.",
+              "bonnes_pratiques": [
+                "Chiffrer les données au repos et en transit.",
+                "Stocker les clés dans un gestionnaire sécurisé."
+              ],
+              "mots_cles": ["cryptographie", "chiffrement", "sécurité des données"],
+              "conformite_check": [
+                "Chiffrez-vous les données sensibles au repos ?",
+                "Chiffrez-vous les données en transit ?",
+                "Utilisez-vous un gestionnaire de clés sécurisé ?"
+              ],
+              "actions_correctives": [
+                "Implémentez le chiffrement AES-256 pour les données au repos.",
+                "Utilisez TLS 1.3 pour les données en transit.",
+                "Adoptez un gestionnaire de clés (ex. HashiCorp Vault)."
               ]
             }
           ]
@@ -120,6 +271,14 @@
       ]
     },
     "faq_chatbot": [
+      {
+        "question": "Comment ISO 27001 peut-elle aider à gérer les cyberattaques modernes comme les ransomwares ?",
+        "reponse": "ISO 27001 aide à gérer les cyberattaques modernes, comme les ransomwares, en imposant une évaluation systématique des risques (clause 6.1) et l’application de contrôles adaptés (Annexe A), tels que le chiffrement (A.8.24), la sensibilisation des employés (A.6.3) et la gestion des incidents (A.5.24). Cela renforce la résilience organisationnelle face à ces menaces."
+      },
+      {
+        "question": "Qu'est-ce que la norme ISO 27001 ?",
+        "reponse": "La norme ISO 27001 est une norme internationale qui définit les exigences pour établir, mettre en œuvre, maintenir et améliorer un Système de Management de la Sécurité de l'Information (SMSI). Elle vise à protéger la confidentialité, l'intégrité et la disponibilité des informations au sein d'une organisation."
+      },
       {
           "question": "Quels sont les 4 types de contrôles de l'Annexe A ?",
           "reponse": "Les contrôles organisationnels, liés aux personnes, physiques et technologiques."
@@ -277,6 +436,6 @@
           "question": "Comment prioriser les risques dans ISO 27001 ?",
           "reponse": "Évaluez les risques selon leur probabilité et leur impact potentiel, puis concentrez-vous sur ceux ayant la plus grande gravité."
       }
-  ]
+    ]
   }
 }
